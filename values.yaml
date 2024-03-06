@@ -1,4 +1,4 @@
-endpoint: "Fake endpoint"
+endpoint: "Custom endpoint"
 releaseNotes: "This is a simple test running in a custom helmrelease to check the behaviour"
 customFields:
   field_1: "This is the custom field 1"
