@@ -1,0 +1,88 @@
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: podinfo
+  namespace: flux-system
+spec:
+  interval: 1m
+  url: https://stefanprodan.github.io/podinfo
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: podinfo
+  namespace: flux-system
+spec:
+  interval: 1m
+  chart:
+    spec:
+      chart: podinfo
+      version: 6.6.0
+      sourceRef:
+        kind: HelmRepository
+        name: podinfo
+        namespace: flux-system
+      interval: 1m
+  values:
+    replicaCount: 1
+---
+apiVersion: notification.toolkit.fluxcd.io/v1beta2
+kind: Provider
+metadata:
+  name: my-webhook-provider
+  namespace: flux-system
+spec:
+  type: generic
+  address: {{ .Values.endpoint }}
+
+---
+apiVersion: notification.toolkit.fluxcd.io/v1beta2
+kind: Alert
+metadata:
+  name: helm-podinfo
+  namespace: flux-system
+spec:
+  summary: Nuevo update
+  eventMetadata:
+    releaseNotes: {{ .Values.releaseNotes }}
+    {{- with .Values.customFields }}
+    customFields:
+    {{- tpl (toYaml .) $ | nindent 6}}
+    {{- end }}
+  providerRef:
+    name: my-webhook-provider
+  eventSeverity: info
+  eventSources:
+  - kind: HelmRelease
+    name: podinfo
+    namespace: flux-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: helmrelease-reader
+  namespace: flux-system 
+rules:
+- apiGroups: ["*"]
+  resources: ["*"] 
+  verbs: ["*"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: helmrelease-reader-binding
+  namespace: flux-system 
+subjects:
+- kind: ServiceAccount
+  name: mi-service-account 
+  namespace: flux-system 
+roleRef:
+  kind: Role
+  name: helmrelease-reader
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: mi-service-account
+  namespace: flux-system
