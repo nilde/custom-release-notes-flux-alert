@@ -14,6 +14,16 @@ entries:
   custom-release-notes-flux-alert:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2024-03-11T12:02:03.863825507Z"
+    description: A Helm chart for Kubernetes
+    digest: 4a055a0f4a54ce739653fa5f8bab19649af4ceb4c2aee4166d63524a2edd50fd
+    name: custom-release-notes-flux-alert
+    type: application
+    urls:
+    - https://github.com/nilde/custom-release-notes-flux-alert/releases/download/custom-release-notes-flux-alert-0.1.3/custom-release-notes-flux-alert-0.1.3.tgz
+    version: 0.1.3
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2024-03-11T11:32:09.991977389Z"
     description: A Helm chart for Kubernetes
     digest: 0d69888ff6158bea26b0bdf07714b1d99decb0fe77cd419deb31af5fabad5afa
@@ -32,4 +42,4 @@ entries:
     urls:
     - https://github.com/nilde/custom-release-notes-flux-alert/releases/download/custom-release-notes-flux-alert-0.1.1/custom-release-notes-flux-alert-0.1.1.tgz
     version: 0.1.1
-generated: "2024-03-11T11:32:09.991987808Z"
+generated: "2024-03-11T12:02:03.863842639Z"
